@@ -24,7 +24,7 @@ if [ $? -eq 0 ]; then
     ssh-keygen
 
     # Optional: Copy the SSH key to the target host
-    ssh-copy-id -p "$password" "$user"@"$target_user"
+    ssh-copy-id "$user"@"$target_user"
 
     # Optional: SSH into the target host
     ssh "$user@$target_user" "$command_to"
