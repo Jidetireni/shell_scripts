@@ -10,6 +10,9 @@ SECURITY_GROUP_DESCRIPTION="Security group for my EC2 instance"
 INSTANCE_COUNT=1
 
 MY_IP=$(curl -s ifconfig.me)
+SECURITY_GROUP_CIDR="${MY_IP}/32"
+
+MY_IP=$(curl -s ifconfig.me)
 CIDR="${MY_IP}/32"
 
 # Create a key pair
@@ -31,6 +34,9 @@ echo "Launching EC2 instance"
 INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --count $INSTANCE_COUNT --instance-type $INSTANCE_TYPE --key-name $KEY_NAME --security-group-ids $SECURITY_GROUP_ID --region $REGION --query 'Instances[0].InstanceId' --output text)
 
 echo "EC2 instance launched with ID: $INSTANCE_ID"
+
+echo "Tagging instance $INSTANCE_ID with name $INSTANCE_NAME"
+aws ec2 create-tags --resources $INSTANCE_ID --tags Key=Name,Value=$INSTANCE_NAME --region $REGION
 
 # Output instance details
 echo "Waiting for instance to be running..."
